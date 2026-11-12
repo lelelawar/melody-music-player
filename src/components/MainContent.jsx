@@ -1,7 +1,7 @@
 import { albums, songs } from '../data/songs'
 import { Play } from 'lucide-react'
 
-function MainContent() {
+function MainContent({onPlaySong}) {
   return (
     <main>
       {/* Featured Section */}
@@ -65,10 +65,11 @@ function MainContent() {
 
         <div className="space-y-2">
           {songs.map((song, index) => (
-            <div
-              key={song.title}
-              className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5"
-            >
+            <button
+          key={song.id}
+          onClick={() => onPlaySong(song)}
+          className="w-full text-left flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition"
+        >
               <span className="text-gray-500 w-5">
                 {index + 1}
               </span>
@@ -94,7 +95,7 @@ function MainContent() {
               <p className="text-sm text-gray-500">
                 {song.duration}
               </p>
-            </div>
+            </button>
           ))}
         </div>
       </section>

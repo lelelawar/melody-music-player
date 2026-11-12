@@ -1,7 +1,7 @@
-
 import {
   SkipBack,
   Play,
+  Pause,
   SkipForward,
   Shuffle,
   Repeat,
@@ -9,23 +9,23 @@ import {
   Heart,
 } from 'lucide-react'
 
-function MusicPlayer() {
+function MusicPlayer({ currentSong, isPlaying, onTogglePlay }) {
   return (
     <footer className="fixed bottom-0 left-0 right-0 h-24 bg-[#18181b] border-t border-white/10 px-6 flex items-center justify-between z-50">
 
       {/* Song Information */}
       <div className="flex items-center gap-3 w-1/4">
-        <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-red-600 to-purple-800 flex items-center justify-center font-bold">
-          B
+        <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${currentSong?.color || 'from-red-600 to-purple-800'} flex items-center justify-center font-bold`}>
+          {currentSong?.title?.charAt(0) || 'M'}
         </div>
 
         <div className="min-w-0">
           <h3 className="text-sm font-semibold truncate">
-            Blinding Lights
+            {currentSong?.title || 'No song selected'}
           </h3>
 
           <p className="text-xs text-gray-500">
-            The Weeknd
+            {currentSong?.artist || 'Unknown artist'}
           </p>
         </div>
 
@@ -45,8 +45,15 @@ function MusicPlayer() {
             <SkipBack size={20} />
           </button>
 
-          <button className="bg-white text-black rounded-full p-2">
-            <Play size={20} fill="currentColor" />
+          <button
+            onClick={onTogglePlay}
+            className="bg-white text-black rounded-full p-2 hover:scale-105 transition"
+          >
+            {isPlaying ? (
+              <Pause size={20} fill="currentColor" />
+            ) : (
+              <Play size={20} fill="currentColor" />
+            )}
           </button>
 
           <button className="text-gray-400 hover:text-white">
@@ -58,18 +65,16 @@ function MusicPlayer() {
           </button>
         </div>
 
-        {/* Progress Bar */}
+        {/* Progress Bar sementara */}
         <div className="flex items-center gap-3 w-full max-w-xl">
-          <span className="text-xs text-gray-500">
-            0:00
-          </span>
+          <span className="text-xs text-gray-500">0:00</span>
 
           <div className="flex-1 h-1 bg-gray-700 rounded-full">
-            <div className="w-1/3 h-full bg-red-500 rounded-full" />
+            <div className="w-0 h-full bg-red-500 rounded-full" />
           </div>
 
           <span className="text-xs text-gray-500">
-            3:20
+            {currentSong?.duration || '0:00'}
           </span>
         </div>
       </div>
