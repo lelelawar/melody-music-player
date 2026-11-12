@@ -1,49 +1,5 @@
-
+import { albums, songs } from '../data/songs'
 import { Play } from 'lucide-react'
-
-const albums = [
-  {
-    title: 'Midnight Memories',
-    artist: 'The Midnight',
-    color: 'from-purple-600 to-indigo-900',
-  },
-  {
-    title: 'After Hours',
-    artist: 'The Weeknd',
-    color: 'from-red-600 to-orange-900',
-  },
-  {
-    title: 'Future Nostalgia',
-    artist: 'Dua Lipa',
-    color: 'from-pink-600 to-purple-900',
-  },
-  {
-    title: 'Random Access',
-    artist: 'Daft Punk',
-    color: 'from-blue-600 to-cyan-900',
-  },
-]
-
-const songs = [
-  {
-    title: 'Blinding Lights',
-    artist: 'The Weeknd',
-    album: 'After Hours',
-    duration: '3:20',
-  },
-  {
-    title: 'Levitating',
-    artist: 'Dua Lipa',
-    album: 'Future Nostalgia',
-    duration: '3:23',
-  },
-  {
-    title: 'Instant Crush',
-    artist: 'Daft Punk',
-    album: 'Random Access',
-    duration: '5:37',
-  },
-]
 
 function MainContent() {
   return (
