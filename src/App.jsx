@@ -10,8 +10,21 @@ function App() {
   const {
     currentSong,
     isPlaying,
+    currentTime,
+    duration,
+    volume,
+    isShuffling,
+    repeatMode,
+    isFavorite,
     playSong,
     togglePlay,
+    nextSong,
+    previousSong,
+    seek,
+    changeVolume,
+    toggleShuffle,
+    cycleRepeat,
+    toggleFavorite,
   } = useAudioPlayer(songs)
 
   return (
@@ -27,7 +40,20 @@ function App() {
       <MusicPlayer
         currentSong={currentSong}
         isPlaying={isPlaying}
+        currentTime={currentTime}
+        duration={duration}
+        volume={volume}
+        isShuffling={isShuffling}
+        repeatMode={repeatMode}
+        isFavorite={isFavorite}
         onTogglePlay={togglePlay}
+        onNext={nextSong}
+        onPrevious={previousSong}
+        onSeek={seek}
+        onVolumeChange={changeVolume}
+        onToggleShuffle={toggleShuffle}
+        onCycleRepeat={cycleRepeat}
+        onToggleFavorite={toggleFavorite}
       />
     </div>
   )
