@@ -1,3 +1,6 @@
+
+import { useState } from 'react'
+
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import MainContent from './components/MainContent'
@@ -7,6 +10,9 @@ import { songs } from './data/songs'
 import useAudioPlayer from './hooks/useAudioPlayer'
 
 function App() {
+  const [activePage, setActivePage] = useState('home')
+  const [searchQuery, setSearchQuery] = useState('')
+
   const {
     currentSong,
     isPlaying,
@@ -16,6 +22,7 @@ function App() {
     isShuffling,
     repeatMode,
     isFavorite,
+    favorites,
     playSong,
     togglePlay,
     nextSong,
@@ -29,12 +36,26 @@ function App() {
 
   return (
     <div className="flex min-h-screen bg-[#09090b] text-white">
-      <Sidebar />
+
+      <Sidebar
+        activePage={activePage}
+        onNavigate={setActivePage}
+      />
 
       <div className="flex-1 min-w-0 p-8 pb-32">
-        <Header />
 
-        <MainContent onPlaySong={playSong} />
+        <Header
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+        />
+
+        <MainContent
+          activePage={activePage}
+          searchQuery={searchQuery}
+          favorites={favorites}
+          onPlaySong={playSong}
+        />
+
       </div>
 
       <MusicPlayer
@@ -55,6 +76,7 @@ function App() {
         onCycleRepeat={cycleRepeat}
         onToggleFavorite={toggleFavorite}
       />
+
     </div>
   )
 }

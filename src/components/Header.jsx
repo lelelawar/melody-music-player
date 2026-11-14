@@ -1,28 +1,31 @@
 
 import { Search, Bell } from 'lucide-react'
 
-function Header() {
+function Header({ searchQuery, onSearchChange }) {
   return (
-    <header className="flex items-center justify-between mb-8">
+    <header className="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-10">
+
       <div>
-        <p className="text-sm text-gray-500">
-          Welcome back
+        <p className="text-sm text-gray-500 mb-1">
+          Welcome back,
         </p>
 
         <h2 className="text-2xl font-bold">
-          Listen to your favorite music
+          Discover Your Music
         </h2>
       </div>
 
       <div className="flex items-center gap-4">
-        {/* Search */}
-        <div className="flex items-center gap-2 bg-[#202023] px-4 py-2 rounded-full">
-          <Search size={18} className="text-gray-400" />
+
+        <div className="flex items-center gap-3 bg-[#18181b] border border-white/10 rounded-full px-4 py-2 w-full md:w-72">
+          <Search size={18} className="text-gray-500 shrink-0" />
 
           <input
             type="text"
-            placeholder="Search music..."
-            className="bg-transparent outline-none text-sm w-40 text-white placeholder:text-gray-500"
+            value={searchQuery}
+            onChange={(event) => onSearchChange(event.target.value)}
+            placeholder="Search songs, artists..."
+            className="bg-transparent outline-none text-sm w-full text-white placeholder:text-gray-500"
           />
         </div>
 
@@ -30,10 +33,10 @@ function Header() {
           <Bell size={20} />
         </button>
 
-        {/* Profile */}
-        <div className="w-9 h-9 rounded-full bg-red-500 flex items-center justify-center font-bold">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500 to-purple-700 flex items-center justify-center font-bold">
           M
         </div>
+
       </div>
     </header>
   )
