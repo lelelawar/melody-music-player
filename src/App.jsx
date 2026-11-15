@@ -1,10 +1,10 @@
-
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import MainContent from './components/MainContent'
 import MusicPlayer from './components/MusicPlayer'
+import PlaylistModal from './components/PlaylistModal'
 
 import { songs } from './data/songs'
 import useAudioPlayer from './hooks/useAudioPlayer'
@@ -12,6 +12,23 @@ import useAudioPlayer from './hooks/useAudioPlayer'
 function App() {
   const [activePage, setActivePage] = useState('home')
   const [searchQuery, setSearchQuery] = useState('')
+
+  // Membaca playlist dari LocalStorage
+  const [playlists, setPlaylists] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('melody-playlists')) || []
+    } catch {
+      return []
+    }
+  })
+
+  const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
+  const [selectedSongForPlaylist, setSelectedSongForPlaylist] = useState(null)
+
+  // Menyimpan playlist ke LocalStorage
+  useEffect(() => {
+    localStorage.setItem('melody-playlists', JSON.stringify(playlists))
+  }, [playlists])
 
   const {
     currentSong,
@@ -34,16 +51,50 @@ function App() {
     toggleFavorite,
   } = useAudioPlayer(songs)
 
+  // Membuka modal playlist
+  const openPlaylistModal = (song = null) => {
+    setSelectedSongForPlaylist(song)
+    setIsPlaylistModalOpen(true)
+  }
+
+  // Membuat playlist baru
+  const createPlaylist = (name) => {
+    const newPlaylist = {
+      id: Date.now(),
+      name,
+      songIds: [],
+    }
+
+    setPlaylists((previous) => [...previous, newPlaylist])
+  }
+
+  // Menambahkan lagu ke playlist
+  const addSongToPlaylist = (song, playlistId) => {
+    setPlaylists((previous) =>
+      previous.map((playlist) => {
+        if (playlist.id !== playlistId) return playlist
+
+        if (playlist.songIds.includes(song.id)) return playlist
+
+        return {
+          ...playlist,
+          songIds: [...playlist.songIds, song.id],
+        }
+      })
+    )
+  }
+
   return (
     <div className="flex min-h-screen bg-[#09090b] text-white">
 
       <Sidebar
         activePage={activePage}
         onNavigate={setActivePage}
+        playlists={playlists}
+        onCreateClick={() => openPlaylistModal()}
       />
 
       <div className="flex-1 min-w-0 p-8 pb-32">
-
         <Header
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
@@ -53,9 +104,10 @@ function App() {
           activePage={activePage}
           searchQuery={searchQuery}
           favorites={favorites}
+          playlists={playlists}
           onPlaySong={playSong}
+          onAddSongToPlaylist={openPlaylistModal}
         />
-
       </div>
 
       <MusicPlayer
@@ -76,6 +128,16 @@ function App() {
         onCycleRepeat={cycleRepeat}
         onToggleFavorite={toggleFavorite}
       />
+
+      {isPlaylistModalOpen && (
+        <PlaylistModal
+          playlists={playlists}
+          song={selectedSongForPlaylist}
+          onClose={() => setIsPlaylistModalOpen(false)}
+          onCreatePlaylist={createPlaylist}
+          onAddSong={addSongToPlaylist}
+        />
+      )}
 
     </div>
   )

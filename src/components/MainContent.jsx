@@ -1,20 +1,33 @@
-
 import { albums, songs } from '../data/songs'
-import { Play, Music, Heart } from 'lucide-react'
+import { Play, Music, Heart, Plus } from 'lucide-react'
 
 function MainContent({
   activePage,
   searchQuery,
   favorites,
+  playlists,
   onPlaySong,
+  onAddSongToPlaylist,
 }) {
+  const selectedPlaylist = activePage.startsWith('playlist-')
+    ? playlists.find(
+        (playlist) => String(playlist.id) === activePage.replace('playlist-', '')
+      )
+    : null
+
   const favoriteSongs = songs.filter((song) =>
     favorites.includes(song.id)
   )
 
+  const playlistSongs = selectedPlaylist
+    ? songs.filter((song) => selectedPlaylist.songIds.includes(song.id))
+    : songs
+
   const pageSongs = activePage === 'favorites'
     ? favoriteSongs
-    : songs
+    : selectedPlaylist
+      ? playlistSongs
+      : songs
 
   const filteredSongs = pageSongs.filter((song) => {
     const query = searchQuery.toLowerCase()
@@ -32,6 +45,10 @@ function MainContent({
     library: 'Your Library',
     favorites: 'Your Favorites',
   }
+
+  const pageTitle = selectedPlaylist
+    ? selectedPlaylist.name
+    : pageTitles[activePage] || 'Popular Songs'
 
   return (
     <main>
@@ -73,9 +90,7 @@ function MainContent({
         activePage === 'library') && (
         <section className="mb-10">
           <h2 className="text-xl font-bold mb-5">
-            {activePage === 'library'
-              ? 'Your Albums'
-              : 'Recently Played'}
+            {activePage === 'library' ? 'Your Albums' : 'Recently Played'}
           </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
@@ -110,46 +125,56 @@ function MainContent({
           )}
 
           <h2 className="text-xl font-bold">
-            {searchQuery
-              ? 'Search Results'
-              : pageTitles[activePage] || 'Popular Songs'}
+            {searchQuery ? 'Search Results' : pageTitle}
           </h2>
         </div>
 
         {filteredSongs.length > 0 ? (
           <div className="space-y-2">
             {filteredSongs.map((song, index) => (
-              <button
+              <div
                 key={song.id}
-                onClick={() => onPlaySong(song)}
-                className="w-full text-left flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition"
+                className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition"
               >
-                <span className="text-gray-500 w-5">
-                  {index + 1}
-                </span>
+                <button
+                  onClick={() => onPlaySong(song)}
+                  className="flex flex-1 min-w-0 items-center gap-4 text-left"
+                >
+                  <span className="text-gray-500 w-5">
+                    {index + 1}
+                  </span>
 
-                <div className={`w-11 h-11 shrink-0 rounded-lg bg-gradient-to-br ${song.color} flex items-center justify-center font-bold`}>
-                  {song.title.charAt(0)}
-                </div>
+                  <div className={`w-11 h-11 shrink-0 rounded-lg bg-gradient-to-br ${song.color} flex items-center justify-center font-bold`}>
+                    {song.title.charAt(0)}
+                  </div>
 
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-medium truncate">
-                    {song.title}
-                  </h3>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium truncate">
+                      {song.title}
+                    </h3>
+
+                    <p className="text-sm text-gray-500 truncate">
+                      {song.artist}
+                    </p>
+                  </div>
+
+                  <p className="hidden sm:block text-sm text-gray-500">
+                    {song.album}
+                  </p>
 
                   <p className="text-sm text-gray-500">
-                    {song.artist}
+                    {song.duration}
                   </p>
-                </div>
+                </button>
 
-                <p className="hidden sm:block text-sm text-gray-500">
-                  {song.album}
-                </p>
-
-                <p className="text-sm text-gray-500">
-                  {song.duration}
-                </p>
-              </button>
+                <button
+                  onClick={() => onAddSongToPlaylist(song)}
+                  className="text-gray-500 hover:text-red-500 p-2 transition"
+                  title="Add to Playlist"
+                >
+                  <Plus size={18} />
+                </button>
+              </div>
             ))}
           </div>
         ) : (
@@ -159,12 +184,14 @@ function MainContent({
             <h3 className="font-semibold mb-2">
               {activePage === 'favorites' && !searchQuery
                 ? 'No Favorites Yet'
-                : 'No Songs Found'}
+                : selectedPlaylist && !searchQuery
+                  ? 'This Playlist Is Empty'
+                  : 'No Songs Found'}
             </h3>
 
             <p className="text-sm text-gray-500">
-              {activePage === 'favorites' && !searchQuery
-                ? 'Add some songs to your favorites first.'
+              {selectedPlaylist && !searchQuery
+                ? 'Add songs using the plus button in your music list.'
                 : 'Try searching with another keyword.'}
             </p>
           </div>
