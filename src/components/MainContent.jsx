@@ -1,5 +1,6 @@
+
 import { albums, songs } from '../data/songs'
-import { Play, Music, Heart, Plus } from 'lucide-react'
+import { Play, Music, Heart, Plus, Pencil, Trash2 } from 'lucide-react'
 
 function MainContent({
   activePage,
@@ -8,10 +9,14 @@ function MainContent({
   playlists,
   onPlaySong,
   onAddSongToPlaylist,
+  onRenamePlaylist,
+  onDeletePlaylist,
+  onRemoveSongFromPlaylist,
 }) {
   const selectedPlaylist = activePage.startsWith('playlist-')
     ? playlists.find(
-        (playlist) => String(playlist.id) === activePage.replace('playlist-', '')
+        (playlist) =>
+          String(playlist.id) === activePage.replace('playlist-', '')
       )
     : null
 
@@ -52,7 +57,6 @@ function MainContent({
 
   return (
     <main>
-
       {/* Featured Section */}
       {activePage === 'home' && (
         <section className="mb-10">
@@ -119,14 +123,36 @@ function MainContent({
 
       {/* Song List */}
       <section>
-        <div className="flex items-center gap-2 mb-5">
-          {activePage === 'favorites' && (
-            <Heart size={20} className="text-red-500" />
-          )}
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+          <div className="flex items-center gap-2">
+            {activePage === 'favorites' && (
+              <Heart size={20} className="text-red-500" />
+            )}
 
-          <h2 className="text-xl font-bold">
-            {searchQuery ? 'Search Results' : pageTitle}
-          </h2>
+            <h2 className="text-xl font-bold">
+              {searchQuery ? 'Search Results' : pageTitle}
+            </h2>
+          </div>
+
+          {selectedPlaylist && (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => onRenamePlaylist(selectedPlaylist.id)}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white transition text-sm"
+              >
+                <Pencil size={16} />
+                Rename
+              </button>
+
+              <button
+                onClick={() => onDeletePlaylist(selectedPlaylist.id)}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition text-sm"
+              >
+                <Trash2 size={16} />
+                Delete
+              </button>
+            </div>
+          )}
         </div>
 
         {filteredSongs.length > 0 ? (
@@ -144,7 +170,9 @@ function MainContent({
                     {index + 1}
                   </span>
 
-                  <div className={`w-11 h-11 shrink-0 rounded-lg bg-gradient-to-br ${song.color} flex items-center justify-center font-bold`}>
+                  <div
+                    className={`w-11 h-11 shrink-0 rounded-lg bg-gradient-to-br ${song.color} flex items-center justify-center font-bold`}
+                  >
                     {song.title.charAt(0)}
                   </div>
 
@@ -167,13 +195,25 @@ function MainContent({
                   </p>
                 </button>
 
-                <button
-                  onClick={() => onAddSongToPlaylist(song)}
-                  className="text-gray-500 hover:text-red-500 p-2 transition"
-                  title="Add to Playlist"
-                >
-                  <Plus size={18} />
-                </button>
+                {selectedPlaylist ? (
+                  <button
+                    onClick={() =>
+                      onRemoveSongFromPlaylist(song.id, selectedPlaylist.id)
+                    }
+                    className="text-gray-500 hover:text-red-500 p-2 transition"
+                    title="Remove from Playlist"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => onAddSongToPlaylist(song)}
+                    className="text-gray-500 hover:text-red-500 p-2 transition"
+                    title="Add to Playlist"
+                  >
+                    <Plus size={18} />
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -197,7 +237,6 @@ function MainContent({
           </div>
         )}
       </section>
-
     </main>
   )
 }

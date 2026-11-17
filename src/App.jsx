@@ -84,6 +84,65 @@ function App() {
     )
   }
 
+      // Mengganti nama playlist
+    const renamePlaylist = (playlistId) => {
+      const playlist = playlists.find((item) => item.id === playlistId)
+
+      if (!playlist) return
+
+      const newName = window.prompt('Masukkan nama playlist baru:', playlist.name)
+
+      if (newName === null) return
+
+      const trimmedName = newName.trim()
+
+      if (!trimmedName) {
+        alert('Nama playlist tidak boleh kosong.')
+        return
+      }
+
+      setPlaylists((previous) =>
+        previous.map((item) =>
+          item.id === playlistId
+            ? { ...item, name: trimmedName }
+            : item
+        )
+      )
+    }
+
+    // Menghapus playlist
+    const deletePlaylist = (playlistId) => {
+      const playlist = playlists.find((item) => item.id === playlistId)
+
+      if (!playlist) return
+
+      const confirmed = window.confirm(
+        `Yakin ingin menghapus playlist "${playlist.name}"?`
+      )
+
+      if (!confirmed) return
+
+      setPlaylists((previous) =>
+        previous.filter((item) => item.id !== playlistId)
+      )
+
+      setActivePage('home')
+    }
+
+    // Menghapus lagu dari playlist
+    const removeSongFromPlaylist = (songId, playlistId) => {
+      setPlaylists((previous) =>
+        previous.map((playlist) =>
+          playlist.id === playlistId
+            ? {
+                ...playlist,
+                songIds: playlist.songIds.filter((id) => id !== songId),
+              }
+            : playlist
+        )
+      )
+    }
+
   return (
     <div className="flex min-h-screen bg-[#09090b] text-white">
 
@@ -107,6 +166,9 @@ function App() {
           playlists={playlists}
           onPlaySong={playSong}
           onAddSongToPlaylist={openPlaylistModal}
+          onRenamePlaylist={renamePlaylist}
+          onDeletePlaylist={deletePlaylist}
+          onRemoveSongFromPlaylist={removeSongFromPlaylist}
         />
       </div>
 
