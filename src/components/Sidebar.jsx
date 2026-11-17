@@ -24,7 +24,7 @@ function Sidebar({
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-64 min-h-screen shrink-0 bg-sidebar border-r border-ui-border p-6 flex-col transition-colors">
+      <aside className="hidden md:flex fixed inset-y-0 left-0 z-40 h-screen h-dvh w-64 shrink-0 overflow-hidden bg-sidebar border-r border-ui-border p-6 flex-col transition-colors">
         <h1 className="text-2xl font-bold mb-10">
           <span className="text-red-500">♪</span> Melody
         </h1>
@@ -56,7 +56,7 @@ function Sidebar({
           </nav>
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 flex min-h-0 flex-1 flex-col">
           <div className="flex items-center justify-between mb-3">
             <p className="text-xs text-muted uppercase">
               Your Playlist
@@ -71,7 +71,7 @@ function Sidebar({
             </button>
           </div>
 
-          <div className="space-y-2">
+          <div className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain">
             {playlists.map((playlist) => {
               const pageId = `playlist-${playlist.id}`
 
@@ -108,7 +108,11 @@ function Sidebar({
       </aside>
 
       {/* Mobile Bottom Navigation */}
-      <div className={`md:hidden fixed bottom-0 left-0 right-0 z-40 h-[var(--mobile-nav-height)] bg-sidebar/95 backdrop-blur-xl border-t border-ui-border transition-[transform,opacity] duration-300 ease-out ${isMobileNavVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'}`}>
+      <div
+        aria-hidden={!isMobileNavVisible}
+        inert={!isMobileNavVisible}
+        className={`md:hidden fixed bottom-0 left-0 right-0 z-40 h-[var(--mobile-nav-height)] bg-sidebar/95 backdrop-blur-xl border-t border-ui-border transition-[transform,opacity] duration-[350ms] ease-in-out motion-reduce:transition-none ${isMobileNavVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'}`}
+      >
         <nav className="flex h-full flex-nowrap items-center gap-1 px-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {menus.map((menu) => {
             const Icon = menu.icon

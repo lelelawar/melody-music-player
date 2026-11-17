@@ -201,7 +201,7 @@ import useAudioPlayer from './hooks/useAudioPlayer'
         isMobileNavVisible={isMobileNavVisible}
       />
 
-      <div className="flex-1 min-w-0 p-4 md:p-8 pb-64 md:pb-32">
+      <div className="flex-1 min-w-0 overflow-x-hidden p-4 md:ml-64 md:p-8 pb-64 md:pb-32">
         <Header
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
