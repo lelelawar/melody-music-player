@@ -23,13 +23,13 @@ function Sidebar({
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-64 min-h-screen shrink-0 bg-[#111113] border-r border-white/10 p-6 flex-col">
+      <aside className="hidden md:flex w-64 min-h-screen shrink-0 bg-sidebar border-r border-ui-border p-6 flex-col transition-colors">
         <h1 className="text-2xl font-bold mb-10">
           <span className="text-red-500">♪</span> Melody
         </h1>
 
         <div className="mb-8">
-          <p className="text-xs text-gray-500 uppercase mb-4">
+          <p className="text-xs text-muted uppercase mb-4">
             Menu
           </p>
 
@@ -41,10 +41,10 @@ function Sidebar({
                 <button
                   key={menu.id}
                   onClick={() => onNavigate(menu.id)}
-                  className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+                  className={`w-full flex items-center gap-3 p-3 rounded-x1 transition-all duration-300 hover:translate-x-1 ${
                     activePage === menu.id
-                      ? 'text-white bg-white/10'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      ? 'text-foreground bg-active'
+                      : 'text-muted hover:text-foreground hover:bg-hover'
                   }`}
                 >
                   <Icon size={20} />
@@ -57,13 +57,13 @@ function Sidebar({
 
         <div className="mb-4">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-xs text-gray-500 uppercase">
+            <p className="text-xs text-muted uppercase">
               Your Playlist
             </p>
 
             <button
               onClick={onCreateClick}
-              className="text-gray-400 hover:text-white transition"
+              className="text-muted hover:text-foreground transition"
               title="Create Playlist"
             >
               <Plus size={18} />
@@ -80,8 +80,8 @@ function Sidebar({
                   onClick={() => onNavigate(pageId)}
                   className={`w-full flex items-center gap-3 p-3 rounded-lg text-left transition ${
                     activePage === pageId
-                      ? 'text-white bg-white/10'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      ? 'text-foreground bg-active'
+                      : 'text-muted hover:text-foreground hover:bg-hover'
                   }`}
                 >
                   <ListMusic size={18} />
@@ -94,20 +94,20 @@ function Sidebar({
             })}
 
             {playlists.length === 0 && (
-              <p className="text-xs text-gray-600 px-3">
+              <p className="text-xs text-subtle px-3">
                 No playlists yet
               </p>
             )}
           </div>
         </div>
 
-        <div className="mt-auto text-xs text-gray-600">
+        <div className="mt-auto text-xs text-subtle">
           Melody Music Player v1.0
         </div>
       </aside>
 
       {/* Mobile Bottom Navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#111113]/95 backdrop-blur-xl border-t border-white/10">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-sidebar/95 backdrop-blur-xl border-t border-ui-border transition-colors">
         <nav className="grid grid-cols-4">
           {menus.map((menu) => {
             const Icon = menu.icon
@@ -117,10 +117,10 @@ function Sidebar({
               <button
                 key={menu.id}
                 onClick={() => onNavigate(menu.id)}
-                className={`flex flex-col items-center justify-center gap-1 py-3 transition ${
+                className={`flex flex-col items-center justify-center gap-1 py-3 transition-all duration-200 active:scale-90 ${
                   isActive
                     ? 'text-red-500'
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-muted hover:text-foreground'
                 }`}
               >
                 <Icon size={21} />
@@ -137,7 +137,7 @@ function Sidebar({
         <div className="flex items-center gap-2 px-3 pb-3 overflow-x-auto">
           <button
             onClick={onCreateClick}
-            className="shrink-0 flex items-center gap-1 bg-white/10 text-white px-3 py-2 rounded-full text-xs"
+            className="shrink-0 flex items-center gap-1 bg-active text-foreground px-3 py-2 rounded-full text-xs"
           >
             <Plus size={14} />
             New Playlist
@@ -149,8 +149,8 @@ function Sidebar({
               onClick={() => onNavigate(`playlist-${playlist.id}`)}
               className={`shrink-0 flex items-center gap-1 px-3 py-2 rounded-full text-xs transition ${
                 activePage === `playlist-${playlist.id}`
-                  ? 'bg-red-600 text-white'
-                  : 'bg-white/5 text-gray-400'
+                    ? 'bg-red-600 text-white'
+                  : 'bg-hover text-muted'
               }`}
             >
               <ListMusic size={14} />
@@ -164,3 +164,4 @@ function Sidebar({
 }
 
 export default Sidebar
+

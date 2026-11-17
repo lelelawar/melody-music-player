@@ -9,9 +9,32 @@ import PlaylistModal from './components/PlaylistModal'
 import { songs } from './data/songs'
 import useAudioPlayer from './hooks/useAudioPlayer'
 
-function App() {
-  const [activePage, setActivePage] = useState('home')
-  const [searchQuery, setSearchQuery] = useState('')
+  function App() {
+    const [activePage, setActivePage] = useState('home')
+    const [searchQuery, setSearchQuery] = useState('')
+
+
+    const [theme, setTheme] = useState(() => {
+      try {
+        return localStorage.getItem('melody-theme') === 'light' ? 'light' : 'dark'
+      } catch {
+        return 'dark'
+      }
+    })
+
+    useEffect(() => {
+      document.documentElement.classList.toggle('light', theme === 'light')
+      try {
+        localStorage.setItem('melody-theme', theme)
+      } catch {
+        // The theme remains usable when browser storage is unavailable.
+      }
+    }, [theme])
+
+    const toggleTheme = () => {
+      setTheme((previous) => previous === 'dark' ? 'light' : 'dark')
+    }
+
 
   // Membaca playlist dari LocalStorage
   const [playlists, setPlaylists] = useState(() => {
@@ -144,7 +167,7 @@ function App() {
     }
 
   return (
-    <div className="flex min-h-screen bg-[#09090b] text-white">
+    <div className="flex min-h-screen bg-background text-foreground transition-colors">
 
       <Sidebar
         activePage={activePage}
@@ -157,6 +180,8 @@ function App() {
         <Header
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
 
         <MainContent

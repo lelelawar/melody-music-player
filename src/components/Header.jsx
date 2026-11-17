@@ -1,12 +1,12 @@
-
+import { Sun, Moon } from 'lucide-react'
 import { Search, Bell } from 'lucide-react'
 
-function Header({ searchQuery, onSearchChange }) {
+function Header({ searchQuery, onSearchChange, theme, onToggleTheme }) {
   return (
     <header className="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-10">
 
       <div>
-        <p className="text-sm text-gray-500 mb-1">
+        <p className="text-sm text-muted mb-1">
           Welcome back,
         </p>
 
@@ -17,19 +17,32 @@ function Header({ searchQuery, onSearchChange }) {
 
       <div className="flex items-center gap-4">
 
-        <div className="flex items-center gap-3 bg-[#18181b] border border-white/10 rounded-full px-4 py-2 w-full md:w-72">
-          <Search size={18} className="text-gray-500 shrink-0" />
+        <div className="flex items-center gap-3 bg-surface border border-ui-border rounded-full px-4 py-2 w-full md:w-72 transition-colors">
+          <Search size={18} className="text-muted shrink-0" />
+
+          <button
+            onClick={onToggleTheme}
+            className="p-2 rounded-full hover:bg-hover active:scale-90 transition-all duration-200"
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+          >
+            {theme === 'dark' ? (
+              <Sun size={20} />
+            ) : (
+              <Moon size={20} />
+            )}
+        </button>
 
           <input
             type="text"
             value={searchQuery}
             onChange={(event) => onSearchChange(event.target.value)}
             placeholder="Search songs, artists..."
-            className="bg-transparent outline-none text-sm w-full text-white placeholder:text-gray-500"
+            className="bg-transparent outline-none text-sm w-full text-foreground placeholder:text-muted"
           />
         </div>
 
-        <button className="text-gray-400 hover:text-white">
+        <button className="text-muted hover:text-foreground">
           <Bell size={20} />
         </button>
 
@@ -43,3 +56,4 @@ function Header({ searchQuery, onSearchChange }) {
 }
 
 export default Header
+

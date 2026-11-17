@@ -39,7 +39,7 @@ function MusicPlayer({
   onToggleFavorite,
 }) {
   return (
-    <footer className="fixed bottom-[112px] md:bottom-0 left-0 right-0 min-h-[112px] md:h-24 bg-[#18181b] border-t border-white/10 px-3 md:px-6 py-3 md:py-0 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0 z-50">
+    <footer className="fixed bottom-[112px] md:bottom-0 left-0 right-0 min-h-[112px] md:h-24 bg-surface border-t border-ui-border px-3 md:px-6 py-3 md:py-0 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0 z-50 transition-colors">
 
       {/* Song Information */}
       <div className="flex items-center gap-3 w-full md:w-1/4 min-w-0">
@@ -52,7 +52,7 @@ function MusicPlayer({
             {currentSong?.title || 'No song selected'}
           </h3>
 
-          <p className="text-xs text-gray-500 truncate">
+          <p className="text-xs text-muted truncate">
             {currentSong?.artist || 'Unknown artist'}
           </p>
         </div>
@@ -62,7 +62,7 @@ function MusicPlayer({
           className={`transition ${
             isFavorite
               ? 'text-red-500'
-              : 'text-gray-500 hover:text-red-500'
+              : 'text-muted hover:text-red-500'
           }`}
           title={isFavorite ? 'Remove Favorite' : 'Add Favorite'}
         >
@@ -82,7 +82,7 @@ function MusicPlayer({
             className={`hidden sm:block transition ${
               isShuffling
                 ? 'text-red-500'
-                : 'text-gray-400 hover:text-white'
+                : 'text-muted hover:text-foreground'
             }`}
             title="Shuffle"
           >
@@ -91,7 +91,7 @@ function MusicPlayer({
 
           <button
             onClick={onPrevious}
-            className="text-gray-400 hover:text-white"
+            className="text-muted hover:text-foreground"
             title="Previous"
           >
             <SkipBack size={20} />
@@ -99,7 +99,7 @@ function MusicPlayer({
 
           <button
             onClick={onTogglePlay}
-            className="bg-white text-black rounded-full p-2 hover:scale-105 transition"
+            className="bg-foreground text-background rounded-full p-2 hover:scale-110 active:scale-90 transition-all duration-200"
             title={isPlaying ? 'Pause' : 'Play'}
           >
             {isPlaying ? (
@@ -111,7 +111,7 @@ function MusicPlayer({
 
           <button
             onClick={onNext}
-            className="text-gray-400 hover:text-white"
+            className="text-muted hover:text-foreground"
             title="Next"
           >
             <SkipForward size={20} />
@@ -122,7 +122,7 @@ function MusicPlayer({
             className={`hidden sm:block transition ${
               repeatMode !== 'off'
                 ? 'text-red-500'
-                : 'text-gray-400 hover:text-white'
+                : 'text-muted hover:text-foreground'
             }`}
             title={`Repeat: ${repeatMode}`}
           >
@@ -136,7 +136,7 @@ function MusicPlayer({
 
         {/* Progress Bar */}
         <div className="flex items-center gap-2 md:gap-3 w-full max-w-xl">
-          <span className="text-[10px] md:text-xs text-gray-500 w-9 text-right">
+          <span className="text-[10px] md:text-xs text-muted w-9 text-right">
             {formatTime(currentTime)}
           </span>
 
@@ -150,7 +150,7 @@ function MusicPlayer({
             className="flex-1 min-w-0 h-1 accent-red-500 cursor-pointer"
           />
 
-          <span className="text-[10px] md:text-xs text-gray-500 w-9">
+          <span className="text-[10px] md:text-xs text-muted w-9">
             {formatTime(duration)}
           </span>
         </div>
@@ -158,7 +158,7 @@ function MusicPlayer({
 
       {/* Volume */}
       <div className="hidden md:flex items-center justify-end gap-3 w-1/4">
-        <Volume2 size={20} className="text-gray-400" />
+        <Volume2 size={20} className="text-muted" />
 
         <input
           type="range"
@@ -176,3 +176,4 @@ function MusicPlayer({
 }
 
 export default MusicPlayer
+

@@ -32,7 +32,7 @@ function PlaylistModal({
 
   return (
     <div className="fixed inset-0 z-[60] bg-black/70 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-[#18181b] border border-white/10 rounded-2xl p-6">
+      <div className="w-full max-w-md bg-surface border border-ui-border rounded-2xl p-6 transition-colors">
 
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
@@ -42,21 +42,21 @@ function PlaylistModal({
             </h2>
           </div>
 
-          <button onClick={onClose} className="text-gray-400 hover:text-white">
+          <button onClick={onClose} className="text-muted hover:text-foreground">
             <X />
           </button>
         </div>
 
         {song && playlists.length > 0 && (
           <div className="mb-5">
-            <label className="block text-sm text-gray-400 mb-2">
+            <label className="block text-sm text-muted mb-2">
               Select Playlist
             </label>
 
             <select
               value={selectedPlaylist}
               onChange={(event) => setSelectedPlaylist(event.target.value)}
-              className="w-full bg-[#27272a] border border-white/10 rounded-lg p-3 text-white outline-none"
+              className="w-full bg-elevated border border-ui-border rounded-lg p-3 text-foreground outline-none"
             >
               <option value="">Choose a playlist</option>
 
@@ -78,13 +78,13 @@ function PlaylistModal({
         )}
 
         {song && playlists.length === 0 && (
-          <p className="text-sm text-gray-400 mb-5">
+          <p className="text-sm text-muted mb-5">
             You don't have a playlist yet. Create one below.
           </p>
         )}
 
         <form onSubmit={handleCreate}>
-          <label className="block text-sm text-gray-400 mb-2">
+          <label className="block text-sm text-muted mb-2">
             {song ? 'Or create a new playlist' : 'Playlist Name'}
           </label>
 
@@ -94,13 +94,13 @@ function PlaylistModal({
             onChange={(event) => setPlaylistName(event.target.value)}
             placeholder="Enter playlist name..."
             maxLength={40}
-            className="w-full bg-[#27272a] border border-white/10 rounded-lg p-3 text-white outline-none focus:border-red-500"
+            className="w-full bg-elevated border border-ui-border rounded-lg p-3 text-foreground outline-none focus:border-red-500"
           />
 
           <button
             type="submit"
             disabled={!playlistName.trim()}
-            className="w-full mt-3 bg-white text-black hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg p-3 font-semibold transition flex items-center justify-center gap-2"
+            className="w-full mt-3 bg-foreground text-background hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed rounded-lg p-3 font-semibold transition flex items-center justify-center gap-2"
           >
             <Plus size={18} />
             Create Playlist

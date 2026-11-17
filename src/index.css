@@ -1,5 +1,45 @@
-
 @import "tailwindcss";
+
+@theme {
+  --color-background: var(--theme-background);
+  --color-surface: var(--theme-surface);
+  --color-sidebar: var(--theme-sidebar);
+  --color-elevated: var(--theme-elevated);
+  --color-foreground: var(--theme-foreground);
+  --color-muted: var(--theme-muted);
+  --color-subtle: var(--theme-subtle);
+  --color-ui-border: var(--theme-border);
+  --color-hover: var(--theme-hover);
+  --color-active: var(--theme-active);
+}
+
+:root {
+  color-scheme: dark;
+  --theme-background: #09090b;
+  --theme-surface: #18181b;
+  --theme-sidebar: #111113;
+  --theme-elevated: #27272a;
+  --theme-foreground: #ffffff;
+  --theme-muted: #a1a1aa;
+  --theme-subtle: #71717a;
+  --theme-border: rgb(255 255 255 / 10%);
+  --theme-hover: rgb(255 255 255 / 7%);
+  --theme-active: rgb(255 255 255 / 10%);
+}
+
+:root.light {
+  color-scheme: light;
+  --theme-background: #f4f4f5;
+  --theme-surface: #ffffff;
+  --theme-sidebar: #fafafa;
+  --theme-elevated: #f4f4f5;
+  --theme-foreground: #18181b;
+  --theme-muted: #71717a;
+  --theme-subtle: #71717a;
+  --theme-border: rgb(0 0 0 / 10%);
+  --theme-hover: rgb(0 0 0 / 5%);
+  --theme-active: rgb(0 0 0 / 8%);
+}
 
 * {
   box-sizing: border-box;
@@ -7,7 +47,9 @@
 
 body {
   margin: 0;
-  background-color: #09090b;
-  color: #ffffff;
-  font-family: Arial, sans-serif;
+  min-width: 320px;
+  background-color: var(--color-background);
+  color: var(--theme-foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+

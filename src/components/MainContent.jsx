@@ -79,7 +79,7 @@ function MainContent({
               onClick={() => {
                 if (songs.length > 0) onPlaySong(songs[0])
               }}
-              className="bg-white text-black px-6 py-2 rounded-full font-semibold flex items-center gap-2"
+              className="bg-foreground text-background px-6 py-2 rounded-full font-semibold flex items-center gap-2 hover:bg-red-500 hover:text-foreground hover:scale-105 active:scale-95 transition-all duration-200"
             >
               <Play size={18} fill="currentColor" />
               Play Music
@@ -99,10 +99,10 @@ function MainContent({
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {albums.map((album) => (
-              <div key={album.id} className="group">
-                <div
-                  className={`aspect-square rounded-xl bg-gradient-to-br ${album.color} flex items-center justify-center mb-3`}
-                >
+          <div key={album.id}
+            className="group cursor-pointer transition-all duration-300 hover:-translate-y-2 motion-reduce:transition-none">
+                <div className={`aspect-square rounded-xl bg-gradient-to-br ${album.color} flex items-center justify-center mb-3 
+                     shadow-lg transition-all duration-300 group-hover:shadow-red-500/20 group-hover:scale-[1.02]`}>
                   <span className="text-4xl font-bold text-white/80">
                     {album.title.charAt(0)}
                   </span>
@@ -112,7 +112,7 @@ function MainContent({
                   {album.title}
                 </h3>
 
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted">
                   {album.artist}
                 </p>
               </div>
@@ -138,7 +138,7 @@ function MainContent({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => onRenamePlaylist(selectedPlaylist.id)}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white transition text-sm"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-hover text-muted hover:bg-hover hover:text-foreground transition text-sm"
               >
                 <Pencil size={16} />
                 Rename
@@ -160,18 +160,18 @@ function MainContent({
             {filteredSongs.map((song, index) => (
               <div
                 key={song.id}
-                className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition"
+                className="group flex items-center gap-4 p-3 rounded-xl hover:bg-hover hover:translate-x-1 active:bg-active active:scale-[0.99] transition-all duration-200 motion-reduce:transition-none"
               >
                 <button
                   onClick={() => onPlaySong(song)}
                   className="flex flex-1 min-w-0 items-center gap-4 text-left"
                 >
-                  <span className="text-gray-500 w-5">
+                  <span className="text-muted w-5">
                     {index + 1}
                   </span>
 
                   <div
-                    className={`w-11 h-11 shrink-0 rounded-lg bg-gradient-to-br ${song.color} flex items-center justify-center font-bold`}
+                    className={`w-11 h-11 shrink-0 rounded-lg bg-gradient-to-br ${song.color} flex items-center justify-center font-bold shadow-md transition-transform duration-300 group-hover:scale-110`}
                   >
                     {song.title.charAt(0)}
                   </div>
@@ -181,16 +181,16 @@ function MainContent({
                       {song.title}
                     </h3>
 
-                    <p className="text-sm text-gray-500 truncate">
+                    <p className="text-sm text-muted truncate">
                       {song.artist}
                     </p>
                   </div>
 
-                  <p className="hidden sm:block text-sm text-gray-500">
+                  <p className="hidden sm:block text-sm text-muted">
                     {song.album}
                   </p>
 
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted">
                     {song.duration}
                   </p>
                 </button>
@@ -200,7 +200,7 @@ function MainContent({
                     onClick={() =>
                       onRemoveSongFromPlaylist(song.id, selectedPlaylist.id)
                     }
-                    className="text-gray-500 hover:text-red-500 p-2 transition"
+                    className="text-muted hover:text-red-500 p-2 transition"
                     title="Remove from Playlist"
                   >
                     <Trash2 size={18} />
@@ -208,7 +208,7 @@ function MainContent({
                 ) : (
                   <button
                     onClick={() => onAddSongToPlaylist(song)}
-                    className="text-gray-500 hover:text-red-500 p-2 transition"
+                    className="text-muted hover:text-red-500 p-2 transition"
                     title="Add to Playlist"
                   >
                     <Plus size={18} />
@@ -219,7 +219,7 @@ function MainContent({
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <Music size={40} className="text-gray-600 mb-4" />
+            <Music size={40} className="text-subtle mb-4" />
 
             <h3 className="font-semibold mb-2">
               {activePage === 'favorites' && !searchQuery
@@ -229,7 +229,7 @@ function MainContent({
                   : 'No Songs Found'}
             </h3>
 
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted">
               {selectedPlaylist && !searchQuery
                 ? 'Add songs using the plus button in your music list.'
                 : 'Try searching with another keyword.'}
@@ -242,3 +242,4 @@ function MainContent({
 }
 
 export default MainContent
+
