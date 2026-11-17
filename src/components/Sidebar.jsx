@@ -12,6 +12,7 @@ function Sidebar({
   onNavigate,
   playlists,
   onCreateClick,
+  isMobileNavVisible,
 }) {
   const menus = [
     { id: 'home', label: 'Home', icon: Home },
@@ -107,8 +108,8 @@ function Sidebar({
       </aside>
 
       {/* Mobile Bottom Navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-sidebar/95 backdrop-blur-xl border-t border-ui-border transition-colors">
-        <nav className="grid grid-cols-4">
+      <div className={`md:hidden fixed bottom-0 left-0 right-0 z-40 h-[var(--mobile-nav-height)] bg-sidebar/95 backdrop-blur-xl border-t border-ui-border transition-[transform,opacity] duration-300 ease-out ${isMobileNavVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'}`}>
+        <nav className="flex h-full flex-nowrap items-center gap-1 px-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {menus.map((menu) => {
             const Icon = menu.icon
             const isActive = activePage === menu.id
@@ -117,7 +118,7 @@ function Sidebar({
               <button
                 key={menu.id}
                 onClick={() => onNavigate(menu.id)}
-                className={`flex flex-col items-center justify-center gap-1 py-3 transition-all duration-200 active:scale-90 ${
+                className={`shrink-0 min-h-11 flex flex-col items-center justify-center gap-0.5 px-3 transition-all duration-200 ease-out active:scale-95 touch-manipulation ${
                   isActive
                     ? 'text-red-500'
                     : 'text-muted hover:text-foreground'
@@ -125,19 +126,16 @@ function Sidebar({
               >
                 <Icon size={21} />
 
-                <span className="text-[11px]">
+                <span className="whitespace-nowrap text-[11px]">
                   {menu.label}
                 </span>
               </button>
             )
           })}
-        </nav>
-
         {/* Mobile Playlist Shortcuts */}
-        <div className="flex items-center gap-2 px-3 pb-3 overflow-x-auto">
           <button
             onClick={onCreateClick}
-            className="shrink-0 flex items-center gap-1 bg-active text-foreground px-3 py-2 rounded-full text-xs"
+            className="shrink-0 min-h-11 flex items-center gap-1 bg-active text-foreground px-3 rounded-full text-xs transition-all duration-200 ease-out active:scale-95 touch-manipulation"
           >
             <Plus size={14} />
             New Playlist
@@ -147,7 +145,7 @@ function Sidebar({
             <button
               key={playlist.id}
               onClick={() => onNavigate(`playlist-${playlist.id}`)}
-              className={`shrink-0 flex items-center gap-1 px-3 py-2 rounded-full text-xs transition ${
+              className={`shrink-0 min-h-11 flex items-center gap-1 px-3 rounded-full text-xs whitespace-nowrap transition-all duration-200 ease-out active:scale-95 touch-manipulation ${
                 activePage === `playlist-${playlist.id}`
                     ? 'bg-red-600 text-white'
                   : 'bg-hover text-muted'
@@ -157,7 +155,7 @@ function Sidebar({
               {playlist.name}
             </button>
           ))}
-        </div>
+        </nav>
       </div>
     </>
   )

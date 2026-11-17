@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
@@ -12,6 +12,30 @@ import useAudioPlayer from './hooks/useAudioPlayer'
   function App() {
     const [activePage, setActivePage] = useState('home')
     const [searchQuery, setSearchQuery] = useState('')
+    const [isMobileNavVisible, setIsMobileNavVisible] = useState(true)
+    const lastScrollY = useRef(0)
+
+    useEffect(() => {
+      const mobileQuery = window.matchMedia('(max-width: 767px)')
+      const updateVisibility = () => {
+        const currentScrollY = Math.max(0, window.scrollY)
+
+        if (!mobileQuery.matches || currentScrollY === 0) {
+          setIsMobileNavVisible(true)
+        } else if (Math.abs(currentScrollY - lastScrollY.current) >= 6) {
+          setIsMobileNavVisible(currentScrollY < lastScrollY.current)
+        }
+
+        lastScrollY.current = currentScrollY
+      }
+
+      window.addEventListener('scroll', updateVisibility, { passive: true })
+      window.addEventListener('resize', updateVisibility)
+      return () => {
+        window.removeEventListener('scroll', updateVisibility)
+        window.removeEventListener('resize', updateVisibility)
+      }
+    }, [])
 
 
     const [theme, setTheme] = useState(() => {
@@ -167,13 +191,14 @@ import useAudioPlayer from './hooks/useAudioPlayer'
     }
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground transition-colors">
+    <div className="flex min-h-screen bg-background text-foreground transition-colors [--mobile-nav-height:3.5rem]">
 
       <Sidebar
         activePage={activePage}
         onNavigate={setActivePage}
         playlists={playlists}
         onCreateClick={() => openPlaylistModal()}
+        isMobileNavVisible={isMobileNavVisible}
       />
 
       <div className="flex-1 min-w-0 p-4 md:p-8 pb-64 md:pb-32">
@@ -206,6 +231,7 @@ import useAudioPlayer from './hooks/useAudioPlayer'
         isShuffling={isShuffling}
         repeatMode={repeatMode}
         isFavorite={isFavorite}
+        isMobileNavVisible={isMobileNavVisible}
         onTogglePlay={togglePlay}
         onNext={nextSong}
         onPrevious={previousSong}

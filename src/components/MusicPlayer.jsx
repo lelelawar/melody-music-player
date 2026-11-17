@@ -29,6 +29,7 @@ function MusicPlayer({
   isShuffling,
   repeatMode,
   isFavorite,
+  isMobileNavVisible,
   onTogglePlay,
   onNext,
   onPrevious,
@@ -39,7 +40,7 @@ function MusicPlayer({
   onToggleFavorite,
 }) {
   return (
-    <footer className="fixed bottom-[112px] md:bottom-0 left-0 right-0 min-h-[112px] md:h-24 bg-surface border-t border-ui-border px-3 md:px-6 py-3 md:py-0 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0 z-50 transition-colors">
+    <footer className={`fixed ${isMobileNavVisible ? 'bottom-[var(--mobile-nav-height)]' : 'bottom-0'} md:bottom-0 left-0 right-0 min-h-[112px] md:h-24 bg-surface border-t border-ui-border px-3 md:px-6 py-3 md:py-0 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0 z-50 transition-[bottom,background-color,border-color,color] duration-300`}>
 
       {/* Song Information */}
       <div className="flex items-center gap-3 w-full md:w-1/4 min-w-0">
