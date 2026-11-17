@@ -153,7 +153,7 @@ function App() {
         onCreateClick={() => openPlaylistModal()}
       />
 
-      <div className="flex-1 min-w-0 p-8 pb-32">
+      <div className="flex-1 min-w-0 p-4 md:p-8 pb-64 md:pb-32">
         <Header
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}

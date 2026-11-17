@@ -1,3 +1,4 @@
+
 import {
   SkipBack,
   Play,
@@ -37,20 +38,16 @@ function MusicPlayer({
   onCycleRepeat,
   onToggleFavorite,
 }) {
-  const progress = duration > 0
-    ? (currentTime / duration) * 100
-    : 0
-
   return (
-    <footer className="fixed bottom-0 left-0 right-0 h-24 bg-[#18181b] border-t border-white/10 px-6 flex items-center justify-between z-50">
+    <footer className="fixed bottom-[112px] md:bottom-0 left-0 right-0 min-h-[112px] md:h-24 bg-[#18181b] border-t border-white/10 px-3 md:px-6 py-3 md:py-0 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0 z-50">
 
       {/* Song Information */}
-      <div className="flex items-center gap-3 w-1/4 min-w-0">
-        <div className={`w-12 h-12 shrink-0 rounded-lg bg-gradient-to-br ${currentSong?.color || 'from-red-600 to-purple-800'} flex items-center justify-center font-bold`}>
+      <div className="flex items-center gap-3 w-full md:w-1/4 min-w-0">
+        <div className={`w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-lg bg-gradient-to-br ${currentSong?.color || 'from-red-600 to-purple-800'} flex items-center justify-center font-bold`}>
           {currentSong?.title?.charAt(0) || 'M'}
         </div>
 
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h3 className="text-sm font-semibold truncate">
             {currentSong?.title || 'No song selected'}
           </h3>
@@ -77,13 +74,12 @@ function MusicPlayer({
       </div>
 
       {/* Music Controls */}
-      <div className="flex flex-col items-center gap-2 w-2/4">
-        <div className="flex items-center gap-6">
+      <div className="flex flex-col items-center gap-2 w-full md:w-2/4">
+        <div className="flex items-center justify-center gap-5 md:gap-6">
 
-          {/* Shuffle */}
           <button
             onClick={onToggleShuffle}
-            className={`transition ${
+            className={`hidden sm:block transition ${
               isShuffling
                 ? 'text-red-500'
                 : 'text-gray-400 hover:text-white'
@@ -93,7 +89,6 @@ function MusicPlayer({
             <Shuffle size={17} />
           </button>
 
-          {/* Previous */}
           <button
             onClick={onPrevious}
             className="text-gray-400 hover:text-white"
@@ -102,7 +97,6 @@ function MusicPlayer({
             <SkipBack size={20} />
           </button>
 
-          {/* Play / Pause */}
           <button
             onClick={onTogglePlay}
             className="bg-white text-black rounded-full p-2 hover:scale-105 transition"
@@ -115,7 +109,6 @@ function MusicPlayer({
             )}
           </button>
 
-          {/* Next */}
           <button
             onClick={onNext}
             className="text-gray-400 hover:text-white"
@@ -124,10 +117,9 @@ function MusicPlayer({
             <SkipForward size={20} />
           </button>
 
-          {/* Repeat */}
           <button
             onClick={onCycleRepeat}
-            className={`transition ${
+            className={`hidden sm:block transition ${
               repeatMode !== 'off'
                 ? 'text-red-500'
                 : 'text-gray-400 hover:text-white'
@@ -143,8 +135,8 @@ function MusicPlayer({
         </div>
 
         {/* Progress Bar */}
-        <div className="flex items-center gap-3 w-full max-w-xl">
-          <span className="text-xs text-gray-500 w-10 text-right">
+        <div className="flex items-center gap-2 md:gap-3 w-full max-w-xl">
+          <span className="text-[10px] md:text-xs text-gray-500 w-9 text-right">
             {formatTime(currentTime)}
           </span>
 
@@ -155,17 +147,17 @@ function MusicPlayer({
             step="0.1"
             value={Math.min(currentTime, duration || 0)}
             onChange={(event) => onSeek(event.target.value)}
-            className="flex-1 h-1 accent-red-500 cursor-pointer"
+            className="flex-1 min-w-0 h-1 accent-red-500 cursor-pointer"
           />
 
-          <span className="text-xs text-gray-500 w-10">
+          <span className="text-[10px] md:text-xs text-gray-500 w-9">
             {formatTime(duration)}
           </span>
         </div>
       </div>
 
       {/* Volume */}
-      <div className="flex items-center justify-end gap-3 w-1/4">
+      <div className="hidden md:flex items-center justify-end gap-3 w-1/4">
         <Volume2 size={20} className="text-gray-400" />
 
         <input
