@@ -111,7 +111,7 @@ function Sidebar({
       <div
         aria-hidden={!isMobileNavVisible}
         inert={!isMobileNavVisible}
-        className={`md:hidden fixed bottom-0 left-0 right-0 z-40 h-[var(--mobile-nav-height)] bg-sidebar/95 backdrop-blur-xl border-t border-ui-border transition-[transform,opacity] duration-[350ms] ease-in-out motion-reduce:transition-none ${isMobileNavVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'}`}
+        className={`md:hidden fixed bottom-0 left-0 right-0 z-40 h-[var(--mobile-nav-height)] bg-sidebar/95 backdrop-blur-xl border-t border-ui-border transition-opacity duration-[450ms] ease-in-out motion-reduce:transition-none ${isMobileNavVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       >
         <nav className="flex h-full flex-nowrap items-center gap-1 px-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {menus.map((menu) => {
