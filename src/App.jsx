@@ -5,12 +5,14 @@ import Header from './components/Header'
 import MainContent from './components/MainContent'
 import MusicPlayer from './components/MusicPlayer'
 import PlaylistModal from './components/PlaylistModal'
+import NowPlaying from './components/NowPlaying'
 
 import { songs } from './data/songs'
 import useAudioPlayer from './hooks/useAudioPlayer'
 
   function App() {
     const [activePage, setActivePage] = useState('home')
+    const [isNowPlayingOpen, setIsNowPlayingOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [isMobileNavVisible, setIsMobileNavVisible] = useState(true)
     const lastScrollY = useRef(0)
@@ -232,6 +234,7 @@ import useAudioPlayer from './hooks/useAudioPlayer'
         repeatMode={repeatMode}
         isFavorite={isFavorite}
         isMobileNavVisible={isMobileNavVisible}
+        onOpenNowPlaying={() => setIsNowPlayingOpen(true)}
         onTogglePlay={togglePlay}
         onNext={nextSong}
         onPrevious={previousSong}
@@ -241,6 +244,28 @@ import useAudioPlayer from './hooks/useAudioPlayer'
         onCycleRepeat={cycleRepeat}
         onToggleFavorite={toggleFavorite}
       />
+
+      {isNowPlayingOpen && (
+        <NowPlaying
+          currentSong={currentSong}
+          isPlaying={isPlaying}
+          currentTime={currentTime}
+          duration={duration}
+          volume={volume}
+          isShuffling={isShuffling}
+          repeatMode={repeatMode}
+          isFavorite={isFavorite}
+          onClose={() => setIsNowPlayingOpen(false)}
+          onTogglePlay={togglePlay}
+          onNext={nextSong}
+          onPrevious={previousSong}
+          onSeek={seek}
+          onVolumeChange={changeVolume}
+          onToggleShuffle={toggleShuffle}
+          onCycleRepeat={cycleRepeat}
+          onToggleFavorite={toggleFavorite}
+        />
+      )}
 
       {isPlaylistModalOpen && (
         <PlaylistModal

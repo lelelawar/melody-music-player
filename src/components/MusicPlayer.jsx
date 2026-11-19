@@ -30,6 +30,7 @@ function MusicPlayer({
   repeatMode,
   isFavorite,
   isMobileNavVisible,
+  onOpenNowPlaying,
   onTogglePlay,
   onNext,
   onPrevious,
@@ -43,7 +44,13 @@ function MusicPlayer({
     <footer className={`fixed ${isMobileNavVisible ? 'bottom-[var(--mobile-nav-height)]' : 'bottom-0'} md:bottom-0 left-0 md:left-64 right-0 min-h-0 md:min-h-[112px] md:h-24 bg-surface border-t border-ui-border px-3 md:px-6 py-1.5 md:py-0 grid grid-cols-[minmax(0,1fr)_auto] grid-rows-[auto_auto] items-center gap-x-2 gap-y-1.5 md:flex md:justify-between md:gap-0 z-50 transition-[bottom,background-color,border-color,color] duration-300`}>
 
       {/* Song Information */}
-      <div className="flex items-center gap-2 md:gap-3 w-full md:w-1/4 min-w-0">
+      <button
+        type="button"
+        onClick={onOpenNowPlaying}
+        className="group flex items-center gap-2 md:gap-3 w-full md:w-1/4 min-w-0 text-left rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+        aria-label="Open Now Playing"
+        title="Open Now Playing"
+      >
         <div className={`w-9 h-9 md:w-12 md:h-12 shrink-0 rounded-lg bg-gradient-to-br ${currentSong?.color || 'from-red-600 to-purple-800'} flex items-center justify-center font-bold`}>
           {currentSong?.title?.charAt(0) || 'M'}
         </div>
@@ -57,8 +64,12 @@ function MusicPlayer({
             {currentSong?.artist || 'Unknown artist'}
           </p>
         </div>
+        <span className="hidden lg:block shrink-0 text-[10px] uppercase tracking-wider text-muted opacity-0 group-hover:opacity-100 transition-opacity">Open</span>
+      </button>
 
+      <div className="flex items-center justify-end">
         <button
+          type="button"
           onClick={onToggleFavorite}
           className={`w-10 h-10 md:w-auto md:h-auto shrink-0 flex items-center justify-center transition ${
             isFavorite
