@@ -89,6 +89,11 @@ import useAudioPlayer from './hooks/useAudioPlayer'
     repeatMode,
     isFavorite,
     favorites,
+    queue,
+    addToQueue,
+    playNext,
+    removeFromQueue,
+    clearQueue,
     playSong,
     togglePlay,
     nextSong,
@@ -217,6 +222,9 @@ import useAudioPlayer from './hooks/useAudioPlayer'
           favorites={favorites}
           playlists={playlists}
           onPlaySong={playSong}
+          queue={queue}
+          onAddToQueue={addToQueue}
+          onPlayNext={playNext}
           onAddSongToPlaylist={openPlaylistModal}
           onRenamePlaylist={renamePlaylist}
           onDeletePlaylist={deletePlaylist}
@@ -233,6 +241,11 @@ import useAudioPlayer from './hooks/useAudioPlayer'
         isShuffling={isShuffling}
         repeatMode={repeatMode}
         isFavorite={isFavorite}
+        queue={queue}
+        onAddToQueue={addToQueue}
+        onPlayNext={playNext}
+        onRemoveFromQueue={removeFromQueue}
+        onClearQueue={clearQueue}
         isMobileNavVisible={isMobileNavVisible}
         onOpenNowPlaying={() => setIsNowPlayingOpen(true)}
         onTogglePlay={togglePlay}
@@ -255,6 +268,11 @@ import useAudioPlayer from './hooks/useAudioPlayer'
           isShuffling={isShuffling}
           repeatMode={repeatMode}
           isFavorite={isFavorite}
+          queue={queue}
+          onAddToQueue={addToQueue}
+          onPlayNext={playNext}
+          onRemoveFromQueue={removeFromQueue}
+          onClearQueue={clearQueue}
           onClose={() => setIsNowPlayingOpen(false)}
           onTogglePlay={togglePlay}
           onNext={nextSong}

@@ -1,6 +1,7 @@
 
+import { useEffect, useState } from 'react'
 import { albums, songs } from '../data/songs'
-import { Play, Music, Heart, Plus, Pencil, Trash2 } from 'lucide-react'
+import { Play, Music, Heart, Plus, Pencil, Trash2, MoreVertical, ListPlus, SkipForward } from 'lucide-react'
 
 function MainContent({
   activePage,
@@ -8,11 +9,35 @@ function MainContent({
   favorites,
   playlists,
   onPlaySong,
+  onAddToQueue,
+  onPlayNext,
   onAddSongToPlaylist,
   onRenamePlaylist,
   onDeletePlaylist,
   onRemoveSongFromPlaylist,
 }) {
+  const [openActionSongId, setOpenActionSongId] = useState(null)
+  const [queueNotice, setQueueNotice] = useState('')
+
+  useEffect(() => {
+    if (!queueNotice) return undefined
+
+    const timeoutId = window.setTimeout(() => setQueueNotice(''), 2200)
+    return () => window.clearTimeout(timeoutId)
+  }, [queueNotice])
+
+  const handleQueueAction = (event, song, action) => {
+    event.stopPropagation()
+    if (action === 'add') {
+      onAddToQueue(song)
+      setQueueNotice('Ditambahkan ke antrean')
+    } else {
+      onPlayNext(song)
+      setQueueNotice('Akan diputar berikutnya')
+    }
+    setOpenActionSongId(null)
+  }
+
   const selectedPlaylist = activePage.startsWith('playlist-')
     ? playlists.find(
         (playlist) =>
@@ -214,6 +239,51 @@ function MainContent({
                     <Plus size={18} />
                   </button>
                 )}
+
+                <div className="relative shrink-0">
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setOpenActionSongId((currentId) => currentId === song.id ? null : song.id)
+                    }}
+                    className="flex h-10 w-10 items-center justify-center rounded-lg text-muted transition hover:bg-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                    aria-label={`More actions for ${song.title}`}
+                    aria-haspopup="menu"
+                    aria-expanded={openActionSongId === song.id}
+                    title="Song actions"
+                  >
+                    <MoreVertical size={19} />
+                  </button>
+
+                  {openActionSongId === song.id && (
+                    <div
+                      role="menu"
+                      aria-label={`Actions for ${song.title}`}
+                      onClick={(event) => event.stopPropagation()}
+                      className="absolute right-0 top-full z-40 mt-1 w-48 overflow-hidden rounded-xl border border-ui-border bg-surface p-1.5 text-foreground shadow-xl"
+                    >
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={(event) => handleQueueAction(event, song, 'add')}
+                        className="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm hover:bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                      >
+                        <ListPlus size={17} className="text-muted" />
+                        Add to Queue
+                      </button>
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={(event) => handleQueueAction(event, song, 'next')}
+                        className="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm hover:bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                      >
+                        <SkipForward size={17} className="text-muted" />
+                        Play Next
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -237,6 +307,16 @@ function MainContent({
           </div>
         )}
       </section>
+
+      {queueNotice && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-28 left-1/2 z-[60] -translate-x-1/2 rounded-full border border-ui-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground shadow-xl"
+        >
+          {queueNotice}
+        </div>
+      )}
     </main>
   )
 }

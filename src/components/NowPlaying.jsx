@@ -3,6 +3,7 @@ import {
   ArrowDown, Heart, ListMusic, Pause, Play, Repeat, Repeat1,
   SkipBack, SkipForward, Shuffle, Volume2,
 } from 'lucide-react'
+import QueuePanel from './QueuePanel'
 
 function formatTime(time) {
   if (!Number.isFinite(time)) return '0:00'
@@ -13,9 +14,11 @@ function NowPlaying({
   currentSong, isPlaying, currentTime, duration, volume, isShuffling,
   repeatMode, isFavorite, onClose, onTogglePlay, onNext, onPrevious,
   onSeek, onVolumeChange, onToggleShuffle, onCycleRepeat, onToggleFavorite,
+  queue, onRemoveFromQueue, onClearQueue,
 }) {
   const [visible, setVisible] = useState(false)
   const [closing, setClosing] = useState(false)
+  const [isQueueOpen, setIsQueueOpen] = useState(false)
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => setVisible(true))
@@ -56,7 +59,13 @@ function NowPlaying({
             <p className="text-[10px] font-semibold tracking-[0.24em] text-muted">NOW PLAYING</p>
             <p className="mt-0.5 max-w-48 truncate text-xs font-medium">{currentSong?.album || 'Melody Music'}</p>
           </div>
-          <button className="flex h-11 w-11 items-center justify-center rounded-full bg-hover text-muted" aria-label="Queue (coming soon)" title="Queue">
+          <button
+            type="button"
+            onClick={() => setIsQueueOpen(true)}
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-hover text-muted transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+            aria-label="Buka Queue"
+            title="Queue"
+          >
             <ListMusic size={20} />
           </button>
         </header>
@@ -111,6 +120,15 @@ function NowPlaying({
           </div>
         </div>
       </section>
+      {isQueueOpen && (
+        <QueuePanel
+          currentSong={currentSong}
+          queue={queue}
+          onRemoveFromQueue={onRemoveFromQueue}
+          onClearQueue={onClearQueue}
+          onClose={() => setIsQueueOpen(false)}
+        />
+      )}
     </div>
   )
 }

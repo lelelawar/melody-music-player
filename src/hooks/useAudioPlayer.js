@@ -13,6 +13,20 @@ function useAudioPlayer(songs) {
   const [isShuffling, setIsShuffling] = useState(false)
   const [repeatMode, setRepeatMode] = useState('off')
 
+  const [queue, setQueue] = useState(() => {
+    try {
+      const savedQueue = JSON.parse(localStorage.getItem('melody-queue'))
+      if (!Array.isArray(savedQueue)) return []
+
+      return savedQueue.filter((item) =>
+        item && item.queueItemId != null &&
+        songs.some((song) => song.id === item.songId)
+      )
+    } catch {
+      return []
+    }
+  })
+
   // Mengambil daftar favorit dari LocalStorage
   const [favorites, setFavorites] = useState(() => {
     try {
@@ -33,6 +47,53 @@ function useAudioPlayer(songs) {
     localStorage.setItem('melody-favorites', JSON.stringify(favorites))
   }, [favorites])
 
+  useEffect(() => {
+    try {
+      localStorage.setItem('melody-queue', JSON.stringify(queue))
+    } catch {
+      // Queue tetap dapat digunakan selama sesi ini jika storage tidak tersedia.
+    }
+  }, [queue])
+
+  const addToQueue = (song) => {
+    if (!songs.some((item) => item.id === song?.id)) return
+
+    setQueue((previous) => [
+      ...previous,
+      { queueItemId: `${Date.now()}-${Math.random().toString(36).slice(2)}`, songId: song.id },
+    ])
+  }
+
+  const playNext = (song) => {
+    if (!songs.some((item) => item.id === song?.id)) return
+
+    setQueue((previous) => {
+      const item = {
+        queueItemId: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        songId: song.id,
+      }
+      return [item, ...previous]
+    })
+  }
+
+  const removeFromQueue = (queueItemId) => {
+    setQueue((previous) => previous.filter((item) => item.queueItemId !== queueItemId))
+  }
+
+  const clearQueue = () => setQueue([])
+
+  const playQueuedSong = (queueItem) => {
+    const index = songs.findIndex((song) => song.id === queueItem.songId)
+    if (index === -1) {
+      setQueue((previous) => previous.filter((item) => item.queueItemId !== queueItem.queueItemId))
+      return false
+    }
+
+    setQueue((previous) => previous.filter((item) => item.queueItemId !== queueItem.queueItemId))
+    changeSong(index)
+    return true
+  }
+
   // Mengatur volume audio
   useEffect(() => {
     audioRef.current.volume = volume
@@ -52,6 +113,11 @@ function useAudioPlayer(songs) {
         audio.play()
           .then(() => setIsPlaying(true))
           .catch(() => setIsPlaying(false))
+        return
+      }
+
+      if (queue.length > 0) {
+        playQueuedSong(queue[0])
         return
       }
 
@@ -98,7 +164,7 @@ function useAudioPlayer(songs) {
       audio.removeEventListener('ended', handleEnded)
       audio.removeEventListener('error', handleError)
     }
-  }, [currentSongIndex, repeatMode, isShuffling, songs])
+  }, [currentSongIndex, repeatMode, isShuffling, songs, queue])
 
   // Memutar lagu berdasarkan index
   const changeSong = (index) => {
@@ -159,6 +225,11 @@ function useAudioPlayer(songs) {
 
   // Next
   const nextSong = () => {
+    if (queue.length > 0) {
+      playQueuedSong(queue[0])
+      return
+    }
+
     if (isShuffling && songs.length > 1) {
       let randomIndex
 
@@ -227,6 +298,11 @@ function useAudioPlayer(songs) {
     repeatMode,
     isFavorite,
     favorites,
+    queue,
+    addToQueue,
+    playNext,
+    removeFromQueue,
+    clearQueue,
     playSong,
     togglePlay,
     nextSong,
